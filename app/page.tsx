@@ -31,13 +31,8 @@ export default function Home() {
     {}
   );
 
-  const moveToCategory = (item: Item, index: number) => {
-    setMainList((prev) => {
-      const newList = [...prev];
-      newList.splice(index, 1);
-      return newList;
-    });
-
+  const moveGo = (item: Item, index: number) => {
+    setMainList((prev) => prev.filter((_, i) => i !== index));
     if (item.type === "Fruit") {
       setFruitList((prev) => [...prev, item]);
     } else {
@@ -53,7 +48,7 @@ export default function Home() {
     setTimeouts((prev) => ({ ...prev, [item.name]: timer }));
   };
 
-  const moveBackToMain = (item: Item) => {
+  const moveBack = (item: Item) => {
     clearTimeout(timeouts[item.name]);
     setMainList((prev) => [...prev, item]);
     setFruitList((prev) => prev.filter((i) => i.name !== item.name));
@@ -63,32 +58,31 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-200 to-pink-100 p-10 flex justify-center items-start">
       <div className="flex gap-8 w-full max-w-6xl shadow-xl rounded-lg bg-white p-6">
-        {/* Main List */}
         <div className="flex flex-col w-1/3 space-y-4">
           {mainList.map((item, index) => (
             <button
               key={item.name}
               className="bg-gray-200 border px-5 py-3 rounded-md hover:bg-gray-300 transition ease-in-out transform hover:scale-105 border-r-4"
-              onClick={() => moveToCategory(item, index)}
+              onClick={() => moveGo(item, index)}
             >
               <label className="text-gray-800 font-semibold">{item.name}</label>
             </button>
           ))}
         </div>
 
-        {/* Fruit & Vegetable Columns */}
+        {/* Category Columns */}
         <div className="flex flex-1 justify-between space-x-6">
           {/* Fruit Column */}
           <div className="flex-1">
             <div className="bg-green-200 text-center font-semibold py-3 rounded-t-lg shadow-md">
               <label className="text-gray-800 font-semibold">Fruits</label>
             </div>
-            <div className="space-x-4 space-y-4 mt-4">
+            <div className="mt-4 space-y-4">
               {fruitList.map((item) => (
                 <button
                   key={item.name}
-                  className="bg-green-100 border px-5 py-3 rounded-md hover:bg-green-300 transition ease-in-out transform hover:scale-105"
-                  onClick={() => moveBackToMain(item)}
+                  className="bg-green-100 border px-5 py-3 rounded-md hover:bg-green-300 transition ease-in-out transform hover:scale-105 w-full"
+                  onClick={() => moveBack(item)}
                 >
                   <label className="text-green-800 font-semibold">
                     {item.name}
@@ -103,12 +97,12 @@ export default function Home() {
             <div className="bg-yellow-200 text-center font-semibold py-3 rounded-t-lg shadow-md">
               <label className="text-gray-800 font-semibold">Vegetables</label>
             </div>
-            <div className="space-x-4 space-y-4 mt-4">
+            <div className="mt-4 space-y-4">
               {vegetableList.map((item) => (
                 <button
                   key={item.name}
-                  className="bg-yellow-100 border px-5 py-3 rounded-md hover:bg-yellow-300 transition ease-in-out transform hover:scale-105"
-                  onClick={() => moveBackToMain(item)}
+                  className="bg-yellow-100 border px-5 py-3 rounded-md hover:bg-yellow-300 transition ease-in-out transform hover:scale-105 w-full"
+                  onClick={() => moveBack(item)}
                 >
                   <label className="text-yellow-800 font-semibold">
                     {item.name}
