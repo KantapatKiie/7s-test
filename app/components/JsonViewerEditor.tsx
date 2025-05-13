@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-json";
@@ -14,6 +14,10 @@ const JsonViewerEditor: React.FC<JsonViewerEditorProps> = ({
   const [jsonContent, setJsonContent] = useState(
     JSON.stringify(initialValue || {}, null, 2)
   );
+
+  useEffect(() => {
+    setJsonContent(JSON.stringify(initialValue, null, 2));
+  }, [initialValue]);
 
   const handleChange = (value: string) => {
     setJsonContent(value);

@@ -71,7 +71,7 @@ export default function Home() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-r from-indigo-200 to-pink-100 p-10 flex justify-center items-start">
-        <div className="flex gap-8 w-full max-w-6xl shadow-xl rounded-lg bg-white p-6">
+        <div className="flex gap-4 max-w-6xl shadow-xl rounded-lg bg-white p-6 w-full">
           <div className="flex flex-col w-1/3 space-y-4">
             {mainList.map((item, index) => (
               <button
@@ -132,7 +132,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-       <JsonViewerEditor initialValue={dataUser} />
+      {/* 2 */}
+      {dataUser && <JsonViewerEditor initialValue={dataUser ?? {}} />}
     </>
   );
 }

@@ -13,6 +13,10 @@ export interface User {
       postalCode: string;
     };
   };
+  hair: {
+    color: string;
+    type: string;
+  };
   firstName: string;
   lastName: string;
   gender: "male" | "female";
@@ -29,7 +33,6 @@ export interface DepartmentSummary {
   addressUser: Record<string, string>;
 }
 
-// Fetch users from the API
 export const fetchUsers = async (): Promise<User[]> => {
   try {
     const response = await axios.get("https://dummyjson.com/users");
@@ -40,7 +43,6 @@ export const fetchUsers = async (): Promise<User[]> => {
   }
 };
 
-// Group users by their department and summarize data
 const groupByDepartment = (
   users: User[]
 ): Record<string, DepartmentSummary> => {
@@ -57,6 +59,7 @@ const groupByDepartment = (
           Blond: 0,
           Chestnut: 0,
           Brown: 0,
+          Green: 0,
         },
         addressUser: {},
       };
@@ -68,10 +71,19 @@ const groupByDepartment = (
       acc[department].female += 1;
     }
 
-    acc[department].hairColorCounts[user.hairColor] += 1;
+    if (
+      user.hairColor &&
+      acc[department].hairColorCounts[user.hairColor] !== undefined
+    ) {
+      acc[department].hairColorCounts[user.hairColor] += 1;
+    }
 
     const fullName = `${user.firstName}${user.lastName}`;
-    acc[department].addressUser[fullName] = user.postalCode;
+    const { address, city, state, country, postalCode } = user.company.address;
+
+    acc[department].addressUser[
+      fullName
+    ] = `${address} ${city} ${state} ${country} ${postalCode}`;
 
     const ageRange = `${Math.floor(user.age / 10) * 10}-${
       Math.floor(user.age / 10) * 10 + 9
@@ -89,11 +101,9 @@ export const processUserData = async () => {
 
   if (users.length > 0) {
     const groupedData = groupByDepartment(users);
-    console.log(JSON.stringify(groupedData, null, 2));
+    // console.log(JSON.stringify(groupedData, null, 2));
     return groupedData;
   } else {
     console.log("No users to process.");
   }
 };
-
-// processUserData();
